@@ -1,6 +1,21 @@
-'use client';
+// src/app/page.jsx
+// Este es el componente principal de la aplicación, usando el App Router de Next.js.
+// Aquí se gestiona la lógica de la interfaz de usuario (UI) para interactuar con la API.
+
+"use client";
 
 import { useState, useEffect } from 'react';
+
+// Función de ayuda para formatear el precio
+const formatPrice = (price) => {
+  if (price === null || price === undefined || isNaN(price)) return '0,00';
+  const formattedPrice = new Intl.NumberFormat('es-AR', {
+    style: 'decimal',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(price);
+  return formattedPrice;
+};
 
 // Componente para el formulario de producto dentro de una modal
 const ProductFormModal = ({ product, onClose, onSave }) => {
@@ -171,16 +186,6 @@ const QuoteView = ({ products, onBack, onPrint }) => {
     setQuoteItems(quoteItems.filter(item => item.id !== productId));
   };
 
-  const formatPrice = (price) => {
-    if (price === null || price === undefined || isNaN(price)) return '0,00';
-    const formattedPrice = new Intl.NumberFormat('es-AR', {
-      style: 'decimal',
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    }).format(price);
-    return formattedPrice;
-  };
-
   const filteredProducts = products.filter(
     (p) =>
       p.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -252,10 +257,10 @@ const QuoteView = ({ products, onBack, onPrint }) => {
 
         <div className="border border-gray-200 p-4 rounded-xl mb-6">
           <h4 className="font-semibold text-gray-700 mb-2">Información del Cliente</h4>
-          <input type="text" placeholder="Nombre" className="w-full p-2 border border-gray-300 rounded-md mb-2 text-black no-print" value={clientInfo.name} onChange={(e) => setClientInfo({...clientInfo, name: e.target.value})}/>
-          <input type="text" placeholder="Dirección" className="w-full p-2 border border-gray-300 rounded-md mb-2 text-black no-print" value={clientInfo.address} onChange={(e) => setClientInfo({...clientInfo, address: e.target.value})}/>
-          <input type="text" placeholder="Teléfono" className="w-full p-2 border border-gray-300 rounded-md mb-2 text-black no-print" value={clientInfo.phone} onChange={(e) => setClientInfo({...clientInfo, phone: e.target.value})}/>
-          <input type="email" placeholder="Email (opcional)" className="w-full p-2 border border-gray-300 rounded-md text-black no-print" value={clientInfo.email} onChange={(e) => setClientInfo({...clientInfo, email: e.target.value})}/>
+          <input type="text" placeholder="Nombre" className="w-full p-2 border border-gray-300 rounded-md mb-2 text-black no-print" value={clientInfo.name} onChange={(e) => setClientInfo({ ...clientInfo, name: e.target.value })} />
+          <input type="text" placeholder="Dirección" className="w-full p-2 border border-gray-300 rounded-md mb-2 text-black no-print" value={clientInfo.address} onChange={(e) => setClientInfo({ ...clientInfo, address: e.target.value })} />
+          <input type="text" placeholder="Teléfono" className="w-full p-2 border border-gray-300 rounded-md mb-2 text-black no-print" value={clientInfo.phone} onChange={(e) => setClientInfo({ ...clientInfo, phone: e.target.value })} />
+          <input type="email" placeholder="Email (opcional)" className="w-full p-2 border border-gray-300 rounded-md text-black no-print" value={clientInfo.email} onChange={(e) => setClientInfo({ ...clientInfo, email: e.target.value })} />
           <p className="text-gray-900 font-semibold print-only">Cliente: {clientInfo.name}</p>
           <p className="text-gray-600 text-sm print-only">Dirección: {clientInfo.address}</p>
           <p className="text-gray-600 text-sm print-only">Teléfono: {clientInfo.phone}</p>
@@ -340,7 +345,7 @@ const QuoteView = ({ products, onBack, onPrint }) => {
           **Este documento es solo un presupuesto y no tiene validez como factura o documento legal.**
         </div>
       </div>
-      
+
       <div className="flex justify-center mt-6 no-print">
         <button onClick={onPrint} className="bg-green-600 text-white font-semibold py-3 px-8 rounded-lg hover:bg-green-700 transition duration-300">
           Imprimir Presupuesto
@@ -379,18 +384,7 @@ const QuoteView = ({ products, onBack, onPrint }) => {
   );
 };
 
-
-// Función de ayuda para formatear el precio
-const formatPrice = (price) => {
-  if (price === null || price === undefined || isNaN(price)) return '0,00';
-  const formattedPrice = new Intl.NumberFormat('es-AR', {
-    style: 'decimal',
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(price);
-  return formattedPrice;
-};
-
+// Componente principal
 export default function Home() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -434,17 +428,15 @@ export default function Home() {
 
   const handleDeleteClick = async (productId) => {
     try {
-      // Reemplazando window.confirm()
-      console.log('Se ha solicitado eliminar el producto con ID:', productId);
-      // Puedes agregar una lógica de confirmación aquí (ej. un modal personalizado)
-      // Por ahora, procederemos con la eliminación.
-      const res = await fetch(`/api/products/${productId}`, {
-        method: 'DELETE',
-      });
-      if (!res.ok) {
-        throw new Error('Error al eliminar el producto');
+      if (window.confirm('¿Estás seguro de que deseas eliminar este producto?')) {
+        const res = await fetch(`/api/products/${productId}`, {
+          method: 'DELETE',
+        });
+        if (!res.ok) {
+          throw new Error('Error al eliminar el producto');
+        }
+        await fetchProducts();
       }
-      await fetchProducts();
     } catch (error) {
       console.error(error);
     }

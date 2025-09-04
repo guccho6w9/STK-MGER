@@ -1,13 +1,8 @@
-// @ts-check
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Configuración para solucionar el problema de Prisma con Vercel y Next.js
-  // Esto asegura que Prisma sea tratado como una dependencia externa
-  // durante el proceso de compilación, evitando errores de sintaxis de módulos.
+  // Configuración de Webpack si es necesaria, como la de Prisma
   webpack: (config, { isServer }) => {
     if (isServer) {
-      // Usa una función para configurar externals, es más robusta y compatible
       config.externals.push('@prisma/client');
     }
     return config;
@@ -19,4 +14,4 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+module.exports = nextConfig;

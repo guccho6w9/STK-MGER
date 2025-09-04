@@ -5,6 +5,8 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import './globals.css';
+
 
 // Función de ayuda para formatear el precio
 const formatPrice = (price) => {

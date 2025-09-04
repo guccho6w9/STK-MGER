@@ -149,9 +149,9 @@ const QuoteView = ({ products, onBack, onPrint }) => {
   });
 
   const companyInfo = {
-    name: 'Nombre del Corralón',
-    address: 'Dirección del Corralón',
-    phone: 'Teléfono del Corralón',
+    name: 'Corralón Sánchez',
+    address: 'Anunciatta cochetti y 25 de mayo, La Banda',
+    phone: '3855-738300 / 3855-192573',
   };
 
   const handleAddItem = (product) => {

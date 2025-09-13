@@ -253,7 +253,7 @@ const QuoteView = ({ products, onBack, onPrint }) => {
           <div className="mt-4 md:mt-0 md:text-right">
             <h3 className="text-xl font-bold text-gray-800">Presupuesto</h3>
             <p className="text-sm text-gray-600">Fecha: {new Date().toLocaleDateString()}</p>
-            <p className="text-sm text-gray-600">Válido hasta: {new Date(new Date().setDate(new Date().getDate() + 7)).toLocaleDateString()}</p>
+          
           </div>
         </div>
 
